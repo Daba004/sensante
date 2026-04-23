@@ -8,7 +8,7 @@ export default function PatientsPage() {
       age: 45, sexe: "M" as const },
     { nom: "Awa Diallo", region: "Saint-Louis",
       age: 28, sexe: "F" as const },
-    { nom: "Cheikh Fall", region: "Ziguinchor",
+    { nom: "Cheikh Fall", region: "Kaolack",
       age: 52, sexe: "M" as const },
   ];
 
