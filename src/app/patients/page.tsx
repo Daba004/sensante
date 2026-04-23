@@ -3,7 +3,7 @@ import PatientCard from "@/components/PatientCard";
 export default function PatientsPage() {
   const patients = [
     { nom: "Aminata Sow", region: "Dakar",
-      age: 34, sexe: "F" as const },
+      age: 35, sexe: "F" as const },
     { nom: "Ibrahima Ba", region: "Thiès",
       age: 45, sexe: "M" as const },
     { nom: "Awa Diallo", region: "Saint-Louis",
