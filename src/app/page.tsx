@@ -25,9 +25,10 @@ export default function Home() {
           Derniers patients
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-<PatientCard nom="Aminata Sow" role="Patiente" groupe="Groupe 2" sexe="F" />
-<PatientCard nom="Ibrahima Ba" role="Patient" groupe="Groupe 2" sexe="M" />
-<PatientCard nom="Awa Diallo" role="Patiente" groupe="Groupe 2" sexe="F" />        </div>
+          <PatientCard nom="Aminata Sow" role="Patiente" groupe="Groupe 2" sexe="F" />
+          <PatientCard nom="Ibrahima Ba" role="Patient" groupe="Groupe 2" sexe="M" />
+          <PatientCard nom="Awa Diallo" role="Patiente" groupe="Groupe 2" sexe="F" />
+        </div>
         <h2 className="text-xl font-semibold text-gray-700 mb-4">
           Dernière consultation
         </h2>
