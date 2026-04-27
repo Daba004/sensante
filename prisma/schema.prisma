@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Patient {
+  id            Int      @id @default(autoincrement())
+  nom           String
+  prenom        String
+  dateNaissance DateTime
+  sexe          String
+  telephone     String?
+  adresse       String?
+  region        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
