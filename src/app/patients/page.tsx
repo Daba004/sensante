@@ -1,27 +1,82 @@
+"use client";
+
 import PatientCard from "@/components/PatientCard";
+import PatientForm from "@/components/PatientForm";
+import { useEffect, useState } from "react";
+
+type Patient = {
+  id: number;
+  nom: string;
+  prenom: string;
+  dateNaissance: string;
+  sexe: "M" | "F";
+  telephone: string | null;
+  adresse: string | null;
+  region: string;
+};
 
 export default function PatientsPage() {
-  const patients = [
-    { nom: "Aminata Sow", region: "Dakar",
-      age: 35, sexe: "F" as const },
-    { nom: "Ibrahima Ba", region: "Thiès",
-      age: 45, sexe: "M" as const },
-    { nom: "Awa Diallo", region: "Saint-Louis",
-      age: 28, sexe: "F" as const },
-    { nom: "Cheikh Fall", region: "Kaolack",
-      age: 52, sexe: "M" as const },
-  ];
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function chargerPatients() {
+      const res = await fetch("/api/patients");
+      const data = await res.json();
+      if (!isMounted) return;
+
+      setPatients(data);
+      setLoading(false);
+    }
+
+    chargerPatients();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  function calculerAge(dateNaissance: string): number {
+    const naissance = new Date(dateNaissance);
+    const today = new Date();
+    let age = today.getFullYear() - naissance.getFullYear();
+    const m = today.getMonth() - naissance.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < naissance.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  function chargerPatients(): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-800 mb-6">
         Patients
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {patients.map((p, i) => (
-          <PatientCard key={i} {...p} role="patient" groupe="A" />
-        ))}
-      </div>
+      <PatientForm onSuccess={chargerPatients} />
+      <h2 className="text-xl font-semibold text-gray-700 mt-8 mb-4">
+        Liste des patients ({patients.length})
+      </h2>
+      {loading ? (
+        <p className="text-gray-500">Chargement...</p>
+      ) : patients.length === 0 ? (
+        <p className="text-gray-500">Aucun patient enregistré.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {patients.map((p) => (
+            <PatientCard
+              key={p.id}
+              nom={`${p.prenom} ${p.nom}`}
+              age={calculerAge(p.dateNaissance)}
+              sexe={p.sexe as "M" | "F"} role={""} groupe={""}            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
