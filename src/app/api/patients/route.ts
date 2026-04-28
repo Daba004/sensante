@@ -21,16 +21,16 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const patient = await prisma.patient.create({
-      data: {
-        nom: body.nom,
-        prenom: body.prenom,
-        dateNaissance: new Date(body.dateNaissance),
-        sexe: body.sexe,
-        telephone: body.telephone || null,
-        adresse: body.adresse || null,
-        region: body.region,
-      },
-    });
+  data: {
+    nom: body.nom,
+    prenom: body.prenom,
+    dateNaissance: new Date(body.dateNaissance),
+    sexe: body.sexe,
+    telephone: body.telephone || null,
+    adresse: body.adresse || null,
+    region: body.region,
+  },
+});
     return NextResponse.json(patient, { status: 201 });
   } catch (error) {
     return NextResponse.json(

@@ -1,41 +1,34 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import PatientCard from "@/components/PatientCard";
 import PatientForm from "@/components/PatientForm";
-import { useEffect, useState } from "react";
 
-type Patient = {
+interface Patient {
   id: number;
   nom: string;
   prenom: string;
   dateNaissance: string;
-  sexe: "M" | "F";
+  sexe: string;
   telephone: string | null;
   adresse: string | null;
   region: string;
-};
+}
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
 
+  async function chargerPatients() {
+    const res = await fetch("/api/patients");
+    const data = await res.json();
+    setPatients(data);
+    setLoading(false);
+  }
+
   useEffect(() => {
-    let isMounted = true;
-
-    async function chargerPatients() {
-      const res = await fetch("/api/patients");
-      const data = await res.json();
-      if (!isMounted) return;
-
-      setPatients(data);
-      setLoading(false);
-    }
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     chargerPatients();
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   function calculerAge(dateNaissance: string): number {
@@ -47,10 +40,6 @@ export default function PatientsPage() {
       age--;
     }
     return age;
-  }
-
-  function chargerPatients(): void {
-    throw new Error("Function not implemented.");
   }
 
   return (
@@ -72,8 +61,10 @@ export default function PatientsPage() {
             <PatientCard
               key={p.id}
               nom={`${p.prenom} ${p.nom}`}
+              region={p.region}
               age={calculerAge(p.dateNaissance)}
-              sexe={p.sexe as "M" | "F"} role={""} groupe={""}            />
+              sexe={p.sexe as "M" | "F"}
+            />
           ))}
         </div>
       )}
