@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import PatientCard from "@/components/PatientCard";
 import PatientForm from "@/components/PatientForm";
@@ -22,12 +21,11 @@ export default function PatientsPage() {
   async function chargerPatients() {
     const res = await fetch("/api/patients");
     const data = await res.json();
-    setPatients(data);
+    setPatients(Array.isArray(data) ? data : []);
     setLoading(false);
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     chargerPatients();
   }, []);
 
@@ -44,9 +42,7 @@ export default function PatientsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">
-        Patients
-      </h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Patients</h1>
       <PatientForm onSuccess={chargerPatients} />
       <h2 className="text-xl font-semibold text-gray-700 mt-8 mb-4">
         Liste des patients ({patients.length})
