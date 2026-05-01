@@ -49,6 +49,7 @@ export default function ConsultationForm({
 
     setLoading(true);
     const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
 
     const res = await fetch("/api/consultations", {
       method: "POST",
@@ -62,7 +63,7 @@ export default function ConsultationForm({
 
     if (res.ok) {
       setSymptomes([]);
-      e.currentTarget.reset();
+      form.reset();
       onSuccess();
     }
     setLoading(false);
@@ -80,7 +81,11 @@ export default function ConsultationForm({
         <label className="block text-sm font-semibold text-gray-700 mb-2">
           Patient
         </label>
-        <select name="patientId" required className="w-full p-3 border rounded-lg">
+        <select
+          name="patientId"
+          required
+          className="w-full p-3 border border-gray-400 rounded-lg bg-gray-100 text-gray-800 font-medium"
+        >
           <option value="">Sélectionner un patient</option>
           {patients.map((p) => (
             <option key={p.id} value={p.id}>
@@ -101,8 +106,8 @@ export default function ConsultationForm({
               key={s}
               className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition
                 ${symptomes.includes(s)
-                  ? "bg-orange-50 border-orange-400"
-                  : "hover:bg-gray-50"
+                  ? "bg-orange-100 border-orange-500"
+                  : "bg-gray-100 border-gray-400 hover:bg-gray-200"
                 }`}
             >
               <input
@@ -111,7 +116,7 @@ export default function ConsultationForm({
                 onChange={() => toggleSymptome(s)}
                 className="accent-orange-500"
               />
-              <span className="text-sm">{s}</span>
+              <span className="text-sm text-gray-800 font-medium">{s}</span>
             </label>
           ))}
         </div>
@@ -126,7 +131,7 @@ export default function ConsultationForm({
           name="notes"
           rows={3}
           placeholder="Observations cliniques..."
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-3 border border-gray-400 rounded-lg bg-gray-100 text-gray-800 placeholder-gray-500"
         />
       </div>
 

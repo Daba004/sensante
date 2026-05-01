@@ -24,18 +24,17 @@ export default function ConsultationsPage() {
 
   async function charger() {
     const res = await fetch("/api/consultations");
+    if (res.status === 401) {
+      window.location.href = "/login";
+      return;
+    }
     const data = await res.json();
-    setConsultations(data);
+    setConsultations(Array.isArray(data) ? data : []);
     setLoading(false);
   }
 
   useEffect(() => {
-    fetch("/api/consultations")
-      .then((res) => res.json())
-      .then((data) => {
-        setConsultations(data);
-        setLoading(false);
-      });
+    charger();
   }, []);
 
   return (
