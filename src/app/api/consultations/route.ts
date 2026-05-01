@@ -33,8 +33,13 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
+    const email = session.user?.email;
+    if (!email) {
+      return NextResponse.json({ error: "Email introuvable" }, { status: 401 });
+    }
+
     const user = await prisma.user.findUnique({
-      where: { email: session.user?.email! },
+      where: { email },
     });
 
     const consultation = await prisma.consultation.create({
