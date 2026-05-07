@@ -1,5 +1,10 @@
+import { Inter } from "next/font/google";
 import SessionWrapper from "@/components/SessionWrapper";
-// ... autres imports (Inter, Header, Sidebar, etc.)
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
