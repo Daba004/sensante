@@ -1,5 +1,7 @@
+
 "use client";
 
+import DiagnosticIA from "@/components/DiagnosticIA";
 import { useEffect, useState } from "react";
 import ConsultationForm from "@/components/ConsultationForm";
 
@@ -39,29 +41,6 @@ export default function ConsultationsPage() {
 
   return (
     <div>
-<<<<<<< HEAD
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">
-        Consultations
-      </h1>
-      <div className="space-y-4">
-        {consultations.map((c: any) => (
-          <div key={c.id}>
-            <ConsultationCard
-              patient={`${c.patient.prenom} ${c.patient.nom}`}
-              date={c.createdAt}
-              symptomes={c.symptomes.join(", ")}
-              statut={c.statut}
-            />
-            <DiagnosticIA
-              consultationId={c.id}
-              diagnosticExistant={c.diagnosticIa}
-              confianceExistante={c.confiance}
-              onDiagnostic={charger}
-            />
-          </div>
-        ))}
-      </div>
-=======
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Consultations</h1>
 
       <ConsultationForm onSuccess={charger} />
@@ -117,25 +96,16 @@ export default function ConsultationsPage() {
                 <p className="text-sm text-gray-600 mt-3 italic">{c.notes}</p>
               )}
 
-              {c.diagnosticIa ? (
-                <div className="mt-3 p-3 bg-red-50 rounded-lg">
-                  <p className="text-sm font-bold text-red-700">
-                    Diagnostic IA : {c.diagnosticIa}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Confiance : {c.confiance}%
-                  </p>
-                </div>
-              ) : (
-                <p className="text-xs text-gray-400 mt-3 italic">
-                  Diagnostic IA en attente (Lab IA — v0.5)
-                </p>
-              )}
+             <DiagnosticIA
+  consultationId={c.id}
+  diagnosticExistant={c.diagnosticIa}
+  confianceExistante={c.confiance}
+  onDiagnostic={charger}
+/>
             </div>
           ))}
         </div>
       )}
->>>>>>> 168a905e6efb526430c2f824b35bb7dc6f3340f1
     </div>
   );
 }
