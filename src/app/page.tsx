@@ -2,6 +2,7 @@ import StatCard from "@/components/StatCard";
 import ConsultationCard from "@/components/ConsultationCard";
 import AlerteIA from "@/components/AlerteIA";
 
+
 export default function Home() {
   return (
     <div>
