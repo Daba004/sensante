@@ -35,7 +35,7 @@ interface Stats {
   }[];
 }
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8", "#82CA9D"];
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -47,17 +47,21 @@ export default function DashboardPage() {
   }, []);
 
   if (!stats) {
-    return <p>Chargement...</p>;
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-gray-500 text-lg">Chargement du dashboard...</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">
+    <div className="space-y-8">
+      <h1 className="text-2xl font-bold text-gray-800">
         Tableau de bord
       </h1>
 
       {/* KPI */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard
           titre="Patients"
           valeur={stats.kpi.totalPatients}
@@ -67,13 +71,13 @@ export default function DashboardPage() {
         <StatCard
           titre="Consultations"
           valeur={stats.kpi.totalConsultations}
-          unite="total"
+          unite="au total"
           couleur="border-orange-500"
         />
         <StatCard
-          titre="Terminées"
+          titre="Diagnostics IA"
           valeur={stats.kpi.consultationsTerminees}
-          unite=""
+          unite="terminés"
           couleur="border-purple-500"
         />
         <StatCard
@@ -85,31 +89,29 @@ export default function DashboardPage() {
       </div>
 
       {/* GRAPHIQUES */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* BAR CHART */}
-        <div className="bg-white p-4 rounded shadow">
-          <h2 className="font-semibold mb-4">
+        <div className="bg-white p-6 rounded-xl shadow-md">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
             Consultations par mois
           </h2>
-
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={stats.parMois}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="mois" />
-              <YAxis />
+              <XAxis dataKey="mois" tick={{ fill: "#4B5563" }} />
+              <YAxis tick={{ fill: "#4B5563" }} />
               <Tooltip />
-              <Bar dataKey="total" fill="#E65100" />
+              <Bar dataKey="total" fill="#E65100" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* PIE CHART */}
-        <div className="bg-white p-4 rounded shadow">
-          <h2 className="font-semibold mb-4">
+        <div className="bg-white p-6 rounded-xl shadow-md">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
             Patients par région
           </h2>
-
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
@@ -133,25 +135,38 @@ export default function DashboardPage() {
       </div>
 
       {/* ALERTES */}
-      <div className="bg-white p-4 rounded shadow">
-        <h2 className="font-semibold mb-4">
+      <div className="bg-white p-6 rounded-xl shadow-md">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">
           Derniers diagnostics IA
         </h2>
-
         <div className="space-y-3">
           {stats.dernieresAlertes.map((a) => (
-            <div key={a.id} className="p-3 bg-gray-50 rounded">
-              <p className="font-semibold">{a.patient}</p>
-              <p className="text-sm text-gray-500">
-                {a.region} —{" "}
-                {new Date(a.date).toLocaleDateString()}
-              </p>
-              <p className="text-sm">
-                {a.diagnostic?.slice(0, 80)}...
-              </p>
-              <p className="text-xs text-gray-500">
-                Confiance: {a.confiance}%
-              </p>
+            <div
+              key={a.id}
+              className="flex justify-between items-start p-4 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition"
+            >
+              <div>
+                <p className="font-semibold text-gray-800">{a.patient}</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {a.region} — {new Date(a.date).toLocaleDateString("fr-FR")}
+                </p>
+                <p className="text-sm text-gray-700 mt-1">
+                  {a.diagnostic?.slice(0, 80)}...
+                </p>
+              </div>
+              <div className="text-right ml-4 shrink-0">
+                <span
+                  className={`text-xs font-bold px-2 py-1 rounded-full ${
+                    (a.confiance ?? 0) >= 75
+                      ? "bg-red-100 text-red-700"
+                      : (a.confiance ?? 0) >= 50
+                      ? "bg-orange-100 text-orange-700"
+                      : "bg-green-100 text-green-700"
+                  }`}
+                >
+                  {a.confiance}%
+                </span>
+              </div>
             </div>
           ))}
         </div>
